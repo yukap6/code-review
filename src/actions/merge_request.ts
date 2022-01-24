@@ -13,6 +13,7 @@ export default function mergeRequest(gitlabDataFromWebHook: any) {
     object_kind,
     user: {
       name: applyerName,
+      username: applyerUsername,
     },
     assignee: { 
       name: assigneeName,
@@ -41,8 +42,20 @@ export default function mergeRequest(gitlabDataFromWebHook: any) {
   if (actionState === 'opened') {
     assigneeStr = `@${userList[assigneeName] || userList[assignUsername]}`;
     if (!userList[assigneeName] && !userList[assignUsername]) {
-      assigneeStr = `@${userList[applyerName]} 要找谁帮你merge代码呢？记得选择Assignee哦`
+      assigneeStr = `@${userList[applyerName] || userList[applyerUsername]} 要找谁帮你merge代码呢？记得选择Assignee哦`
     }
+  }
+  if (actionState === 'merged') {
+    const {
+      object_attributes: {
+        last_commit: {
+          author: {
+            email: applyerEmail,
+          },
+        },
+      },
+    } = gitlabDataFromWebHook
+    assigneeStr = `@${userList[applyerEmail.replace('@mistong.com', '')] || '佚名'}, you can move on now`;
   }
 
   axios.post(
