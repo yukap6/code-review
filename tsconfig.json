@@ -1,0 +1,28 @@
+{
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "compilerOptions": {
+    // Ensure that .d.ts files are created by tsc, but not .js files
+    // "declaration": true,
+    // "emitDeclarationOnly": true,
+    // Ensure that Babel can safely transpile files in the TypeScript project
+    // "isolatedModules": true,
+    // Ensure don't emit files if there are errors
+    "noEmitOnError": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    // Compiler output directory
+    "outDir": "dist",
+    "target": "es5",
+
+    "lib": ["es6"],
+    "types": ["node", "jest"],
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/*.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
