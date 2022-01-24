@@ -16,6 +16,7 @@ export default function mergeRequest(gitlabDataFromWebHook: any) {
     },
     assignee: { 
       name: assigneeName,
+      username: assignUsername,
     },
     object_attributes: { 
       action,
@@ -35,9 +36,13 @@ export default function mergeRequest(gitlabDataFromWebHook: any) {
   } = gitlabDataFromWebHook;
 
   // if merge request no assignee, then @ applyer and notice him/her
-  let assigneeStr = `@${userList[assigneeName]}`
-  if (!userList[assigneeName]) {
-    assigneeStr = `@${userList[applyerName]} 要找谁帮你merge代码呢？记得选择Assignee哦`
+  // only @assignee if mr is opened
+  let assigneeStr = '';
+  if (actionState === 'opened') {
+    assigneeStr = `@${userList[assigneeName] || userList[assignUsername]}`;
+    if (!userList[assigneeName] && !userList[assignUsername]) {
+      assigneeStr = `@${userList[applyerName]} 要找谁帮你merge代码呢？记得选择Assignee哦`
+    }
   }
 
   axios.post(

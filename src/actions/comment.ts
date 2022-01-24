@@ -17,10 +17,6 @@ export default function comments(gitlabDataFromWebHook: any) {
       noteable_type: noteAbleType,
       note,
     },
-    merge_request: {
-      source_branch,
-      target_branch,
-    },
     project: {
       name: projectName,
     },
@@ -29,6 +25,18 @@ export default function comments(gitlabDataFromWebHook: any) {
     },
   } = gitlabDataFromWebHook;
   
+  const isMergeRequestComment = noteAbleType === 'MergeRequest'; // check is normal comment or MR comment
+  let commentSuffixDes = '';
+  if (isMergeRequestComment) {
+    const {
+      merge_request: {
+        source_branch,
+        target_branch,
+      },
+    } = gitlabDataFromWebHook;
+    commentSuffixDes = `from ${source_branch} to ${target_branch}`;
+  }
+
   // if note is 1, it means this mr is ready for next process, then @ master
   const noteDescription = String(note) === '1' ? `1 上一轮MR已完成 @${userList['jingweirong']}` : gitlabUserToDingTalkUser(note);
   axios.post(
@@ -43,7 +51,7 @@ export default function comments(gitlabDataFromWebHook: any) {
       "markdown": {
         "title": object_kind,
         // // @ need to config 2 place, this is second place
-        "text": `#### CodeReview: ${applyerName} [commented](${gitActionUrl}) on ${upperCamelCaseToLowerCase(noteAbleType)} from ${source_branch} to ${target_branch} \n`
+        "text": `#### CodeReview: ${applyerName} [commented](${gitActionUrl}) on ${upperCamelCaseToLowerCase(noteAbleType)} ${commentSuffixDes} \n`
           + `> ${noteDescription} \n`
           + `> [${gitActionUrl}](${gitActionUrl}) \n`
         + `> Repository: ${projectName} \n`

@@ -1,6 +1,7 @@
 import Koa from "koa";
 import bodyParser from 'koa-bodyparser';
 import Router from 'koa-router';
+import fs from 'fs';
 import actionComment from './actions/comment';
 import actionMergeRequest from './actions/merge_request';
 
@@ -14,6 +15,9 @@ const router = new Router();
 
 router.post('/code-review', async (ctx: ICtx) => {
   const gitlabDataFromWebHook = ctx.request.body;
+  fs.writeFile('log.txt', encodeURIComponent(JSON.stringify(gitlabDataFromWebHook)), () => {
+
+  });
   const {
     object_kind,
   } = gitlabDataFromWebHook || {};

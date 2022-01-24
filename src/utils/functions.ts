@@ -15,6 +15,6 @@ export function upperCamelCaseToLowerCase(str = '') {
 export function gitlabUserToDingTalkUser(str = '') {
   const reg = /\@[^\s]*/g;
   return str.replace(reg, (match: string) => {
-    return `@${userList[match.replace('@', '')]}`;
+    return `@${userList[match.replace('@', '')] || match}`;
   });
 }

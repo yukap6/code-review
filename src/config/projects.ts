@@ -1,8 +1,8 @@
 // 测试群
-export const defaultDingtalkUrl = 'https://oapi.dingtalk.com/robot/send?access_token=ce934d72606e0fe43cfa015f628cbc1b95438f47f0d575c6336a95eea1490b96';
+// export const defaultDingtalkUrl = 'https://oapi.dingtalk.com/robot/send?access_token=ce934d72606e0fe43cfa015f628cbc1b95438f47f0d575c6336a95eea1490b96';
 
 // code review 正式群
-// export const defaultDingtalkUrl = 'https://oapi.dingtalk.com/robot/send?access_token=ae02abd824a4c628b97dd95a2ce3f2a67303cccfe38b6c3dd2aee2c6efb8c169';
+export const defaultDingtalkUrl = 'https://oapi.dingtalk.com/robot/send?access_token=ae02abd824a4c628b97dd95a2ce3f2a67303cccfe38b6c3dd2aee2c6efb8c169';
 
 const projectDingtalkUrls: any = {
   // 默认B端CodeReview群消息
