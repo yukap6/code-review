@@ -31,3 +31,4 @@ spm_modules
 .husky
 .vscode
 /src/config/user_list.ts
+log.txt
