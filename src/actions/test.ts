@@ -1,7 +1,8 @@
 import axios from 'axios';
 // import gitlabDataFromWebHook from '../events_mock_data/merge_request';
 // import gitlabDataFromWebHook from '../events_mock_data/comment';
-import gitlabDataFromWebHook from '../events_mock_data/normal_comment';
+// import gitlabDataFromWebHook from '../events_mock_data/normal_comment';
+import gitlabDataFromWebHook from '../events_mock_data/merge_request_closed';
 
 
 const localHook = 'http://127.0.0.1:50001/code-review';
