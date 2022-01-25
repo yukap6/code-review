@@ -12,10 +12,13 @@ interface ICtx {
 
 const app = new Koa();
 const router = new Router();
+// DingTalk group code review url
+const defaultDingtalkUrl = 'https://oapi.dingtalk.com/robot/send?access_token=ae02abd824a4c628b97dd95a2ce3f2a67303cccfe38b6c3dd2aee2c6efb8c169';
 
 router.post('/code-review', async (ctx: ICtx) => {
-  const gitlabDataFromWebHook = ctx.request.body;
-  fs.writeFile('log.txt', encodeURIComponent(JSON.stringify(gitlabDataFromWebHook)), () => {
+  const { dingTalkUrl } = ctx.request.query || {};
+  const gitlabDataFromWebHook = { dingTalkUrl: dingTalkUrl || defaultDingtalkUrl, ...ctx.request.body, };
+  fs.writeFile('log.txt', JSON.stringify(gitlabDataFromWebHook), () => {
 
   });
   const {

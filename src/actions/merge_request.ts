@@ -1,6 +1,5 @@
 import axios from 'axios';
 import userList from '../config/user_list';
-import { getDingtalkUrlByRepositoryUrl } from '../utils/functions';
 
 /**
  * 需求
@@ -10,6 +9,7 @@ import { getDingtalkUrlByRepositoryUrl } from '../utils/functions';
 
 export default function mergeRequest(gitlabDataFromWebHook: any) {
   const {
+    dingTalkUrl,
     object_kind,
     user: {
       name: applyerName,
@@ -31,9 +31,6 @@ export default function mergeRequest(gitlabDataFromWebHook: any) {
     project: {
       name: projectName,
     },
-    repository: {
-      url: repositoryUrl,
-    },
   } = gitlabDataFromWebHook;
 
   // if merge request no assignee, then @ applyer and notice him/her
@@ -41,6 +38,7 @@ export default function mergeRequest(gitlabDataFromWebHook: any) {
   let assigneeStr = '';
   if (actionState === 'opened') {
     assigneeStr = `@${userList[assigneeName] || userList[assignUsername]}`;
+    // if no assignee then @ the applyer him/her self
     if (!userList[assigneeName] && !userList[assignUsername]) {
       assigneeStr = `@${userList[applyerName] || userList[applyerUsername]} 要找谁帮你merge代码呢？记得选择Assignee哦`
     }
@@ -48,6 +46,7 @@ export default function mergeRequest(gitlabDataFromWebHook: any) {
   if (actionState === 'merged') {
     const {
       object_attributes: {
+        // last_commit is exist this case
         last_commit: {
           author: {
             email: applyerEmail,
@@ -55,11 +54,15 @@ export default function mergeRequest(gitlabDataFromWebHook: any) {
         },
       },
     } = gitlabDataFromWebHook
-    assigneeStr = `@${userList[applyerEmail.replace('@mistong.com', '')] || '佚名'}, you can move on now`;
+    const lastCommitUsername = applyerEmail.replace('@mistong.com', '');
+    if (lastCommitUsername !== applyerName) {
+      // only @ user if this actions is not dispatched by him/her self
+      assigneeStr = `@${userList[lastCommitUsername] || '佚名'}, you can move on now`;
+    }
   }
 
   axios.post(
-    getDingtalkUrlByRepositoryUrl(repositoryUrl),
+    dingTalkUrl,
     {
       "msgtype": "markdown",
       "at": {

@@ -1,9 +1,4 @@
 import userList from '../config/user_list';
-import projects, { defaultDingtalkUrl } from '../config/projects';
-
-export function getDingtalkUrlByRepositoryUrl(url = '') {
-  return projects[url] || defaultDingtalkUrl;
-}
 
 export function upperCamelCaseToLowerCase(str = '') {
   const reg = /([A-Z])/g;

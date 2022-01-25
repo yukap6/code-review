@@ -3,11 +3,11 @@ import userList from '../config/user_list';
 import {
   upperCamelCaseToLowerCase,
   gitlabUserToDingTalkUser,
-  getDingtalkUrlByRepositoryUrl,
 } from '../utils/functions';
 
 export default function comments(gitlabDataFromWebHook: any) {
   const {
+    dingTalkUrl,
     object_kind,
     user: {
       name: applyerName,
@@ -19,9 +19,6 @@ export default function comments(gitlabDataFromWebHook: any) {
     },
     project: {
       name: projectName,
-    },
-    repository: {
-      url: repositoryUrl,
     },
   } = gitlabDataFromWebHook;
   
@@ -40,7 +37,7 @@ export default function comments(gitlabDataFromWebHook: any) {
   // if note is 1, it means this mr is ready for next process, then @ master
   const noteDescription = String(note) === '1' ? `1 上一轮MR已完成 @${userList['jingweirong']}` : gitlabUserToDingTalkUser(note);
   axios.post(
-    getDingtalkUrlByRepositoryUrl(repositoryUrl),
+    dingTalkUrl,
     {
       "msgtype": "markdown",
       "at": {
