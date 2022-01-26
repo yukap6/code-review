@@ -57,7 +57,7 @@ export default function mergeRequest(gitlabDataFromWebHook: any) {
     const lastCommitUsername = applyerEmail.replace('@mistong.com', '');
     if (lastCommitUsername !== applyerName) {
       // only @ user if this actions is not dispatched by him/her self
-      assigneeStr = `@${userList[lastCommitUsername] || '佚名'}, you can move on now`;
+      assigneeStr = `@${userList[lastCommitUsername] || '佚名'}, you can go on now`;
     }
   }
 
