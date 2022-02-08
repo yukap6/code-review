@@ -1,4 +1,4 @@
-import axios from 'axios';
+import request from '../utils/request';
 import userList from '../config/user_list';
 import {
   upperCamelCaseToLowerCase,
@@ -8,7 +8,6 @@ import {
 export default function comments(gitlabDataFromWebHook: any) {
   const {
     dingTalkUrl,
-    object_kind,
     user: {
       name: applyerName,
     },
@@ -36,25 +35,9 @@ export default function comments(gitlabDataFromWebHook: any) {
 
   // if note is 1, it means this mr is ready for next process, then @ master
   const noteDescription = String(note) === '1' ? `1 上一轮MR已完成 @${userList['jingweirong']}` : gitlabUserToDingTalkUser(note);
-  axios.post(
-    dingTalkUrl,
-    {
-      "msgtype": "markdown",
-      "at": {
-        "atMobiles": Object.values(userList), // @ need to config 2 place, this is first place
-        "atUserIds": [],
-        "isAtAll": false
-      },
-      "markdown": {
-        "title": object_kind,
-        // // @ need to config 2 place, this is second place
-        "text": `#### CodeReview: ${applyerName} [commented](${gitActionUrl}) on ${upperCamelCaseToLowerCase(noteAbleType)} ${commentSuffixDes} \n`
-          + `> ${noteDescription} \n`
-          + `> [${gitActionUrl}](${gitActionUrl}) \n`
-        + `> Repository: ${projectName} \n`
-      },
-    }
-  ).then((res: any) => {
-    console.log(res.data);
-  });
+  const text = `${applyerName} [commented](${gitActionUrl}) on ${upperCamelCaseToLowerCase(noteAbleType)} ${commentSuffixDes} \n`
+    + `> ${noteDescription} \n`
+    + `> [${gitActionUrl}](${gitActionUrl}) \n`
+    + `> Repository: ${projectName} \n`;
+  request(dingTalkUrl, text);
 }

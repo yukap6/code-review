@@ -2,7 +2,7 @@
   "name": "code-review",
   "version": "1.0.0",
   "description": "nodejs + gitlab webhook code review",
-  "main": "src/index.ts",
+  "main": "T/T.js",
   "scripts": {
     "test": "ts-node ./src/actions/test.ts",
     "dev": "nodemon ./src/index.ts",
@@ -25,6 +25,7 @@
   },
   "peerDependencies": {},
   "devDependencies": {
+    "@babel/preset-env": "^7.16.11",
     "@tsconfig/recommended": "^1.0.1",
     "@types/jest": "^27.4.0",
     "@types/koa": "^2.13.4",

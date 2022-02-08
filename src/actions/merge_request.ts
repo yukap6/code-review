@@ -1,4 +1,4 @@
-import axios from 'axios';
+import request from '../utils/request';
 import userList from '../config/user_list';
 
 /**
@@ -61,27 +61,12 @@ export default function mergeRequest(gitlabDataFromWebHook: any) {
     }
   }
 
-  axios.post(
-    dingTalkUrl,
-    {
-      "msgtype": "markdown",
-      "at": {
-        "atMobiles": Object.values(userList), // @ need to config 2 place, this is first place
-        "atUserIds": [],
-        "isAtAll": false
-      },
-      "markdown": {
-        "title": object_kind,
-        // @ need to config 2 place, this is second place
-        "text": `#### CodeReview: ${applyerName} ${action} the ${object_kind} from ${source_branch} to ${target_branch} ${assigneeStr} \n `
-          + `> [${title}](${gitActionUrl}) \n `
-          + `> ###### [${description}](${gitActionUrl}) \n `
-          + ` > ###### Status: ${actionState} \n `
-          + `> Repository: ${projectName} \n `
-        + `> ###### [${gitActionUrl}](${gitActionUrl})`
-      },
-    }
-  ).then((res: any) => {
-    console.log(res.data);
-  });
+  const text = `${applyerName} ${action} the ${object_kind} from ${source_branch} to ${target_branch} ${assigneeStr} \n `
+    + `> [${title}](${gitActionUrl}) \n `
+    + `> ###### [${description}](${gitActionUrl}) \n `
+    + ` > ###### Status: ${actionState} \n `
+    + `> Repository: ${projectName} \n `
+    + `> ###### [${gitActionUrl}](${gitActionUrl})`;
+  
+  request(dingTalkUrl, text);
 }

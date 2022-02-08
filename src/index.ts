@@ -4,6 +4,12 @@ import Router from 'koa-router';
 import fs from 'fs';
 import actionComment from './actions/comment';
 import actionMergeRequest from './actions/merge_request';
+import actionPush from './actions/push';
+import actionTagPush from './actions/tag_push';
+import actionIssue from './actions/issue';
+import actionBuild from './actions/build';
+import actionPipeline from './actions/pipeline';
+import actionWiki from './actions/wiki';
 
 interface ICtx {
   request: any;
@@ -24,15 +30,31 @@ router.post('/code-review', async (ctx: ICtx) => {
   const {
     object_kind,
   } = gitlabDataFromWebHook || {};
-  // 异步调用钉钉的群通知消息
+  // send message to dingTalk group asynchronous
   switch (object_kind) {
     case 'merge_request':
-      // 代码合并
       actionMergeRequest(gitlabDataFromWebHook);
       break;
     case 'note':
       actionComment(gitlabDataFromWebHook);
-      // 评论
+      break;
+    case 'push':
+      actionPush(gitlabDataFromWebHook);
+      break;
+    case 'tag_push':
+      actionTagPush(gitlabDataFromWebHook);
+      break;
+    case 'issue':
+      actionIssue(gitlabDataFromWebHook);
+      break;
+    case 'build':
+      actionBuild(gitlabDataFromWebHook);
+      break;
+    case 'pipeline':
+      actionPipeline(gitlabDataFromWebHook);
+      break;
+    case 'wiki_page':
+      actionWiki(gitlabDataFromWebHook);
       break;
     default:
       // nothing
