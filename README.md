@@ -20,3 +20,7 @@ yarn run build
 yarn run dev
 ```
 
+参考文档地址
+
+* webhooks 数据格式：https://docs.gitlab.com/ee/user/project/integrations/webhook_events.html#pipeline-events
+
